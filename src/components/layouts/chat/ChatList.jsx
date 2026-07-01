@@ -1,7 +1,8 @@
-import { MessageSquarePlus, Search } from "lucide-react";
+import { Loader2, MessageSquarePlus, Search, X } from "lucide-react";
 import moment from "moment";
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
+//🔹 Chat Listt
 export const CHAT_LIST = [
   {
     id: "c1",
@@ -133,8 +134,26 @@ export const CHAT_LIST = [
   },
 ];
 
+//🔹Filler Arr
+const FILTER_METH_ARR = [
+  { id: "all", name: "All" },
+  { id: "unread", name: "Unread" },
+  { id: "favorites", name: "Favorites" },
+];
+
 export default function ChatList() {
-  // Format chat timestamp for chat list display
+  //🔹 All state
+  const [chatListData, setChatListData] = useState(CHAT_LIST);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // 🔹 Filter Chat List
+  const filterChatList = useMemo(() => {
+    return chatListData.filter((chat) =>
+      chat.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+  }, [chatListData, searchQuery]);
+
+  //🔹 Format chat timestamp for chat list display
   // Today      -> 10:30 AM
   // Yesterday  -> Yesterday
   // Within 7 days -> Monday
@@ -155,8 +174,8 @@ export default function ChatList() {
 
   return (
     <article className="flex flex-col h-full w-[400px] bg-surface py-5 border-r border-border px-2">
-      <header className="px-3 flex flex-col gap-2">
-        <section className="flex justify-between items-center">
+      <header className="relative z-40 px-3 flex flex-col gap-4">
+        <section className="flex justify-between items-center select-none">
           <div>
             <h2 className="font-bold text-xl text-textPrimary">Infive Chat</h2>
           </div>
@@ -169,27 +188,51 @@ export default function ChatList() {
           </span>
         </section>
         <section>
-          <div className="group flex items-center gap-2 rounded-full px-4 py-2.5 bg-surfaceSoft text-textMuted hover:scale-[1.03] duration-200">
-            <label htmlFor="Search">
+          <div className="relative flex items-center gap-3 rounded-full bg-transparent text-textMuted">
+            <label htmlFor="Search" className="absolute left-2.5 cursor-text">
               <Search size={20} />
             </label>
+
             <input
-              className="bg-transparent border-none outline-none group-focus:outline  group-focus:outline-accent"
-              type="text"
-              name="Search"
               id="Search"
-              placeholder="aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              type="text"
+              value={searchQuery}
+              placeholder="Search..."
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full h-full pl-9 pr-4 py-2 bg-surfaceSoft rounded-full outline-none text-sm text-textPrimary placeholder:text-textMuted transition-all duration-200 hover:ring-2 hover:ring-surfaceSoft focus:ring-2 focus:ring-accent"
             />
+
+            <footer className="absolute right-2.5 top-1/2 -translate-y-1/2">
+              <div className="relative size-6 flex items-center justify-center">
+                <Loader2
+                  size={24}
+                  className="absolute animate-spin text-accent"
+                />
+
+                <X size={12} className="relative z-10 text-textPrimary" />
+              </div>
+            </footer>
           </div>
+          <ul className="flex items-center gap-3 py-2">
+            {FILTER_METH_ARR.map((item) => (
+              <li
+                key={item.id}
+                // onClick={}
+                className="border border-border bg-surfaceSoft text-[13px] text-textMuted font-bold py-0.5 px-3 rounded-full"
+              >
+                <span>{item.name}</span>
+              </li>
+            ))}
+          </ul>
         </section>
       </header>
       <nav className="h-full flex flex-col justify-between">
         <ul className="flex flex-col gap-3">
-          {CHAT_LIST.map((item) => (
+          {filterChatList.map((item) => (
             <li key={item.id}>
               <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:bg-boxHover">
                 {/* Avatar */}
-                <div className="relative shrink-0">
+                <div className="relative z-40 shrink-0">
                   <img
                     src={item.avatar}
                     alt={item.name}
@@ -225,22 +268,7 @@ export default function ChatList() {
                     </p>
 
                     {item.unreadCount > 0 && (
-                      <span
-                        className="
-              ml-3
-              min-w-5
-              h-5
-              rounded-full
-              bg-accent
-              text-white
-              text-[11px]
-              font-semibold
-              flex
-              items-center
-              justify-center
-              px-1.5
-            "
-                      >
+                      <span className="ml-3 min-w-5 h-5 rounded-full bg-accent text-white text-[11px] font-semibold flex items-center justify-center px-1.5">
                         {item.unreadCount}
                       </span>
                     )}
