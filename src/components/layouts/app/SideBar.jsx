@@ -79,7 +79,7 @@ export default function SideBar() {
               />
             </NavLink>
 
-            <span className="absolute left-14 top-1/2 -translate-y-1/2 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+            <span className="absolute left-14 top-1/2 -translate-y-1/2 z-50 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
               You
             </span>
           </li>

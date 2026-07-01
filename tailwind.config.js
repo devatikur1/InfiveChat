@@ -16,7 +16,7 @@ module.exports = {
 
         // ===== Text =====
         textPrimary: "#FFFFFF",
-        textMuted: "#f2f2f2",
+        textMuted: "#7E7E7E",
         textDark: "#000000",
 
         // ===== Accent / Brand =====
