@@ -1,6 +1,7 @@
+import clsx from "clsx";
 import { Loader2, MessageSquarePlus, Search, X } from "lucide-react";
 import moment from "moment";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 //🔹 Chat Listt
 export const CHAT_LIST = [
@@ -143,15 +144,31 @@ const FILTER_METH_ARR = [
 
 export default function ChatList() {
   //🔹 All state
-  const [chatListData, setChatListData] = useState(CHAT_LIST);
+  const [chatListData] = useState(CHAT_LIST);
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeFilter, setActiveFilter] = useState("all");
 
   // 🔹 Filter Chat List
   const filterChatList = useMemo(() => {
-    return chatListData.filter((chat) =>
+    let chats = chatListData.filter((chat) =>
       chat.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
-  }, [chatListData, searchQuery]);
+
+    switch (activeFilter) {
+      case "unread":
+        chats = chats.filter((chat) => chat.unreadCount > 0);
+        break;
+
+      case "favorites":
+        chats = chats.filter((chat) => chat.isPinned);
+        break;
+
+      default:
+        break;
+    }
+
+    return chats;
+  }, [chatListData, searchQuery, activeFilter]);
 
   //🔹 Format chat timestamp for chat list display
   // Today      -> 10:30 AM
@@ -217,8 +234,13 @@ export default function ChatList() {
             {FILTER_METH_ARR.map((item) => (
               <li
                 key={item.id}
-                // onClick={}
-                className="border border-border bg-surfaceSoft text-[13px] text-textMuted font-bold py-0.5 px-3 rounded-full"
+                onClick={() => setActiveFilter(item.id)}
+                className={clsx(
+                  "border text-[13px] font-bold py-0.5 px-3 rounded-full",
+                  activeFilter === item.id
+                    ? "border-surfaceSoft/10 bg-surfaceSoft/20 text-info"
+                    : "border-border bg-surfaceSoft text-textMuted",
+                )}
               >
                 <span>{item.name}</span>
               </li>
@@ -226,8 +248,8 @@ export default function ChatList() {
           </ul>
         </section>
       </header>
-      <nav className="h-full flex flex-col justify-between">
-        <ul className="flex flex-col gap-3">
+      <nav className="w-full h-full flex flex-col justify-between">
+        <ul className="w-full h-full flex flex-col gap-3">
           {filterChatList.map((item) => (
             <li key={item.id}>
               <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:bg-boxHover">
@@ -277,6 +299,13 @@ export default function ChatList() {
               </button>
             </li>
           ))}
+          {filterChatList.length === 0 && (
+            <li className="w-full h-full flex justify-center items-center">
+              <span className="text-textMuted font-normal text">
+                No chats, contacts or messages found
+              </span>
+            </li>
+          )}
         </ul>
       </nav>
     </article>
