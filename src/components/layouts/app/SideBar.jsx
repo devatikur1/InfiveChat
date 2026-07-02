@@ -24,7 +24,7 @@ export default function SideBar() {
           {SIDEBAR_ITEM_LIST.map((item) => {
             let ICON = item.icon;
             return (
-              <li key={item.id} className="relative group">
+              <li key={item.id} className="relative z-50 group">
                 <NavLink
                   to={item.path}
                   className={({ isActive }) =>
@@ -36,7 +36,7 @@ export default function SideBar() {
                 >
                   <ICON />
                 </NavLink>
-                <span className="absolute left-14 top-1/2 -translate-y-1/2 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <span className="absolute z-50 left-14 top-1/2 -translate-y-1/2 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                   {item.title}
                 </span>
               </li>
@@ -44,7 +44,7 @@ export default function SideBar() {
           })}
         </ul>
         <ul className="flex flex-col justify-center items-center gap-2">
-          <li className="relative group">
+          <li className="relative z-50 group">
             <NavLink
               to={"/media"}
               className={({ isActive }) =>
@@ -56,11 +56,11 @@ export default function SideBar() {
             >
               <Images />
             </NavLink>
-            <span className="absolute left-14 top-1/2 -translate-y-1/2 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+            <span className="absolute z-50 left-14 top-1/2 -translate-y-1/2 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
               Media
             </span>
           </li>
-          <li className="relative group">
+          <li className="relative z-50 group">
             <NavLink
               to={"/you"}
               className={({ isActive }) =>
@@ -79,7 +79,7 @@ export default function SideBar() {
               />
             </NavLink>
 
-            <span className="absolute left-14 top-1/2 -translate-y-1/2 z-50 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+            <span className="absolute z-50 left-14 top-1/2 -translate-y-1/2 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
               You
             </span>
           </li>

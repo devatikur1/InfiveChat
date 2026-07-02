@@ -1,10 +1,12 @@
 import clsx from "clsx";
-import { Loader2, MessageSquarePlus, Search, X } from "lucide-react";
+import { ChevronDown, Loader2, MessageSquarePlus, Pin, Search, X } from "lucide-react";
 import moment from "moment";
 import React, { useMemo, useState } from "react";
+import ChatContextMenu from "./ChatContextMenu";
+import { NavLink } from "react-router-dom";
 
 //🔹 Chat Listt
-export const CHAT_LIST = [
+const CHAT_LIST = [
   {
     id: "c1",
     name: "Rakib Hasan",
@@ -147,6 +149,8 @@ export default function ChatList() {
   const [chatListData] = useState(CHAT_LIST);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menuPositionData, setMenuPositionData] = useState({});
 
   // 🔹 Filter Chat List
   const filterChatList = useMemo(() => {
@@ -169,6 +173,18 @@ export default function ChatList() {
 
     return chats;
   }, [chatListData, searchQuery, activeFilter]);
+
+  //🔹 Open chat context menu & calculate its position
+  function openChatContextMenu(e) {
+    e.preventDefault();
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMenuPositionData({
+      isMobile: false,
+      x: false ? undefined : rect.top + rect.height + 4,
+      y: false ? undefined : Math.max(8, rect.right - 240),
+    });
+    setIsMenuOpen(true);
+  }
 
   //🔹 Format chat timestamp for chat list display
   // Today      -> 10:30 AM
@@ -205,8 +221,11 @@ export default function ChatList() {
           </span>
         </section>
         <section>
-          <div className="relative flex items-center gap-3 rounded-full bg-transparent text-textMuted">
-            <label htmlFor="Search" className="absolute left-2.5 cursor-text">
+          <div className="relative z-40 flex items-center gap-3 rounded-full bg-transparent text-textMuted">
+            <label
+              htmlFor="Search"
+              className="absolute z-40 left-2.5 cursor-text"
+            >
               <Search size={20} />
             </label>
 
@@ -219,27 +238,27 @@ export default function ChatList() {
               className="w-full h-full pl-9 pr-4 py-2 bg-surfaceSoft rounded-full outline-none text-sm text-textPrimary placeholder:text-textMuted transition-all duration-200 hover:ring-2 hover:ring-surfaceSoft focus:ring-2 focus:ring-accent"
             />
 
-            <footer className="absolute right-2.5 top-1/2 -translate-y-1/2">
-              <div className="relative size-6 flex items-center justify-center">
+            <footer className="absolute z-40 right-2.5 top-1/2 -translate-y-1/2">
+              <div className="relative z-40 size-6 flex items-center justify-center">
                 <Loader2
                   size={24}
-                  className="absolute animate-spin text-accent"
+                  className="absolute z-40 animate-spin text-accent"
                 />
 
-                <X size={12} className="relative z-10 text-textPrimary" />
+                <X size={12} className="relative z-30 text-textPrimary" />
               </div>
             </footer>
           </div>
-          <ul className="flex items-center gap-3 py-2">
+          <ul className="flex items-center gap-3 py-2.5">
             {FILTER_METH_ARR.map((item) => (
               <li
                 key={item.id}
                 onClick={() => setActiveFilter(item.id)}
                 className={clsx(
-                  "border text-[13px] font-bold py-0.5 px-3 rounded-full",
+                  "flex items-center cursor-pointer rounded-full border px-3 py-1 text-[13px] font-semibold transition-all duration-200 select-none",
                   activeFilter === item.id
-                    ? "border-surfaceSoft/10 bg-surfaceSoft/20 text-info"
-                    : "border-border bg-surfaceSoft text-textMuted",
+                    ? "border-accent bg-accent/15 text-accent"
+                    : "border-border bg-surfaceSoft text-textMuted hover:bg-boxHover",
                 )}
               >
                 <span>{item.name}</span>
@@ -248,11 +267,18 @@ export default function ChatList() {
           </ul>
         </section>
       </header>
-      <nav className="w-full h-full flex flex-col justify-between">
-        <ul className="w-full h-full flex flex-col gap-3">
+      <nav className="w-full h-full flex flex-col overflow-auto">
+        <ul className="w-full h-full flex flex-col gap-3 py-1.5">
           {filterChatList.map((item) => (
-            <li key={item.id}>
-              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:bg-boxHover">
+            <li
+              className="group"
+              onContextMenu={openChatContextMenu}
+              key={item.id}
+            >
+              <NavLink
+                to={`@${item.username}`}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-boxHover"
+              >
                 {/* Avatar */}
                 <div className="relative z-40 shrink-0">
                   <img
@@ -262,7 +288,7 @@ export default function ChatList() {
                   />
 
                   {item.isOnline && (
-                    <span className="absolute bottom-0 right-0 size-3.5 rounded-full bg-success border-2 border-surface " />
+                    <span className="absolute z-40 bottom-0 right-0 size-3.5 rounded-full bg-success border-2 border-surface" />
                   )}
                 </div>
 
@@ -289,14 +315,24 @@ export default function ChatList() {
                       )}
                     </p>
 
-                    {item.unreadCount > 0 && (
-                      <span className="ml-3 min-w-5 h-5 rounded-full bg-accent text-white text-[11px] font-semibold flex items-center justify-center px-1.5">
-                        {item.unreadCount}
+                    <div className="flex justify-center items-center gap-2">
+                      {item.isPinned && (
+                        <span className="text-textMuted w-5 h-5 flex justify-center items-center">
+                          <Pin size={18} />
+                        </span>
+                      )}
+                      {item.unreadCount > 0 && (
+                        <span className="min-w-5 h-5 rounded-full bg-accent text-white text-[11px] font-semibold flex items-center justify-center px-1.5">
+                          {item.unreadCount}
+                        </span>
+                      )}
+                      <span className="text-textMuted w-5 h-5 hidden group-hover:flex justify-center items-center transition-all duration-200">
+                        <ChevronDown size={18} />
                       </span>
-                    )}
+                    </div>
                   </div>
                 </div>
-              </button>
+              </NavLink>
             </li>
           ))}
           {filterChatList.length === 0 && (
@@ -308,6 +344,12 @@ export default function ChatList() {
           )}
         </ul>
       </nav>
+      {isMenuOpen && (
+        <ChatContextMenu
+          menuPositionData={menuPositionData}
+          setIsMenuOpen={setIsMenuOpen}
+        />
+      )}
     </article>
   );
 }
