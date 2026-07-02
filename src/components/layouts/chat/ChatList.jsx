@@ -151,13 +151,11 @@ export default function ChatList() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menuPositionData, setMenuPositionData] = useState({});
-
   // 🔹 Filter Chat List
   const filterChatList = useMemo(() => {
     let chats = chatListData.filter((chat) =>
       chat.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
-
     switch (activeFilter) {
       case "unread":
         chats = chats.filter((chat) => chat.unreadCount > 0);
