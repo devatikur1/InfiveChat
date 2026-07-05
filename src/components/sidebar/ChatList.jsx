@@ -1,5 +1,12 @@
 import clsx from "clsx";
-import { ChevronDown, Loader2, MessageSquarePlus, Pin, Search, X } from "lucide-react";
+import {
+  ChevronDown,
+  Loader2,
+  MessageSquarePlus,
+  Pin,
+  Search,
+  X,
+} from "lucide-react";
 import moment from "moment";
 import React, { useMemo, useState } from "react";
 import ChatContextMenu from "./ChatContextMenu";
@@ -135,6 +142,22 @@ const CHAT_LIST = [
     isVerified: false,
     isGroup: false,
   },
+  {
+    id: "c9",
+    name: "Tamim",
+    username: "tamim",
+    avatar: "https://i.pravatar.cc/150?img=28",
+    lastMessage: "See you tomorrow.",
+    lastMessageType: "text",
+    time: new Date("2025-07-01T09:20:00"),
+    unreadCount: 0,
+    isPinned: false,
+    isMuted: true,
+    isOnline: false,
+    isTyping: false,
+    isVerified: false,
+    isGroup: false,
+  },
 ];
 
 //🔹Filler Arr
@@ -151,11 +174,13 @@ export default function ChatList() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menuPositionData, setMenuPositionData] = useState({});
+
   // 🔹 Filter Chat List
   const filterChatList = useMemo(() => {
     let chats = chatListData.filter((chat) =>
       chat.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
+
     switch (activeFilter) {
       case "unread":
         chats = chats.filter((chat) => chat.unreadCount > 0);
@@ -204,8 +229,8 @@ export default function ChatList() {
   }
 
   return (
-    <article className="flex flex-col h-full w-[400px] bg-surface py-5 border-r border-border px-2">
-      <header className="relative z-40 px-3 flex flex-col gap-4">
+    <article className="flex flex-col flex-1 lg:h-full w-full lg:w-[400px] 2xl:w-[500px] bg-surface pt-5 border-r border-border px-0.5 overflow-auto">
+      <header className="relative z-40 flex flex-col gap-4 px-5">
         <section className="flex justify-between items-center select-none">
           <div>
             <h2 className="font-bold text-xl text-textPrimary">Infive Chat</h2>
@@ -265,8 +290,8 @@ export default function ChatList() {
           </ul>
         </section>
       </header>
-      <nav className="w-full h-full flex flex-col overflow-auto">
-        <ul className="w-full h-full flex flex-col gap-3 py-1.5">
+      <nav className="w-full h-full flex flex-col overflow-auto custom-scroll">
+        <ul className="w-full h-full flex flex-col gap-3 py-1.5 px-2">
           {filterChatList.map((item) => (
             <li
               className="group"
