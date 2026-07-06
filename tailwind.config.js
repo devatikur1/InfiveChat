@@ -6,42 +6,43 @@ module.exports = {
     extend: {
       colors: {
         // ===== Base Backgrounds =====
-        bgPrimary: "#000000",
-        bgSecondary: "#353535",
-        bgSoft: "",
+        bgPrimary: "#09090B",
+        bgSecondary: "#111827",
+        bgSoft: "#18181B",
 
-        surface: "#0A0A0A",
-        surfaceSoft: "#1c1c1c",
-        surfaceHard: "#080808",
+        // ===== Surfaces =====
+        surface: "#0F1117",
+        surfaceSoft: "#161B22",
+        surfaceHard: "#0B0F15",
 
         // ===== Text =====
-        textPrimary: "#FFFFFF",
-        textMuted: "#7E7E7E",
-        textDark: "#000000",
+        textPrimary: "#F8FAFC",
+        textMuted: "#94A3B8",
+        textDark: "#020617",
 
-        // ===== Accent / Brand =====
+        // ===== Accent =====
         accent: "#3B82F6",
         accentSoft: "#60A5FA",
-        accentHover: "#1c1c1c",
+        accentHover: "#2563EB",
 
-        // ===== UI States =====
-        hover: "#191a1a",
-        border: "#1A1A1A",
-        boxHover: "#282828",
-        active: "#191a1a",
+        // ===== UI =====
+        hover: "#1E293B",
+        border: "#273244",
+        boxHover: "#2F3C52",
+        active: "#1D4ED8",
 
-        // ===== Status Colors =====
-        success: "#10B981",
+        // ===== Status =====
+        success: "#22C55E",
         successSoft: "#14532D",
 
-        warning: "#FFB300",
+        warning: "#F59E0B",
         warningSoft: "#78350F",
 
         error: "#EF4444",
-        errorSoft: "#881337",
+        errorSoft: "#7F1D1D",
 
         info: "#38BDF8",
-        infoSoft: "#0B2A3A",
+        infoSoft: "#0C4A6E",
       },
     },
   },
