@@ -172,8 +172,7 @@ export default function ChatList() {
   const [chatListData] = useState(CHAT_LIST);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMenuOpenNumber, setIsMenuOpenNumber] = useState("");
+  const [activeMenuId, setActiveMenuId] = useState(null);
   const [menuPositionData, setMenuPositionData] = useState({});
 
   // 🔹 Filter Chat List
@@ -201,14 +200,12 @@ export default function ChatList() {
   //🔹 Open chat context menu & calculate its position
   function openChatContextMenu(e, id) {
     e.preventDefault();
-    const rect = e.currentTarget.getBoundingClientRect();
     setMenuPositionData({
-      isMobile: false,
-      x: false ? undefined : rect.top + rect.height + 4,
-      y: false ? undefined : Math.max(8, rect.right - 240),
+      isMobile: window.innerWidth < 1024,
+      x: e.clientY,
+      y: e.clientX,
     });
-    setIsMenuOpen(true);
-    setIsMenuOpenNumber(id);
+    setActiveMenuId(id);
   }
 
   //🔹 Format chat timestamp for chat list display
@@ -295,85 +292,93 @@ export default function ChatList() {
       <nav className="w-full h-full flex flex-col overflow-auto custom-scroll">
         <ul className="w-full h-full flex flex-col gap-3 py-1.5 px-2">
           {filterChatList.map((item) => (
-            <li
-              className="group"
-              onContextMenu={(e) => openChatContextMenu(e, item.id)}
-              key={item.id}
-            >
-              <NavLink
-                to={`@${item.username}`}
-                className="w-full flex items-center gap-3 px-2 lg:px-4 py-3 rounded-lg transition-all duration-200 lg:hover:bg-boxHover"
+            <React.Fragment key={item.id}>
+              <li
+                className="group"
+                onContextMenu={(e) => openChatContextMenu(e, item.id)}
               >
-                {/* Avatar */}
-                <div className="relative z-40 shrink-0">
-                  <img
-                    src={item.avatar}
-                    alt={item.name}
-                    className="size-12 lg:size-14 rounded-full object-cover"
-                  />
+                <NavLink
+                  to={`@${item.username}`}
+                  className="w-full flex items-center gap-3 px-2 lg:px-4 py-3 rounded-lg transition-all duration-200 lg:hover:bg-boxHover"
+                >
+                  {/* Avatar */}
+                  <div className="relative z-40 shrink-0">
+                    <img
+                      src={item.avatar}
+                      alt={item.name}
+                      className="size-12 lg:size-14 rounded-full object-cover"
+                    />
 
-                  {item.isOnline && (
-                    <span className="absolute z-40 bottom-0 right-0 size-3 lg:size-3.5 rounded-full bg-success border-2 border-surface" />
-                  )}
-                </div>
-
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-medium text-[14px] lg:text-[15px] truncate text-textPrimary/90">
-                      {item.name}
-                    </h3>
-
-                    <span className="text-[10px] lg:text-[11px] font-normal text-textMuted whitespace-nowrap">
-                      {formatDateTime(item.time)}
-                    </span>
+                    {item.isOnline && (
+                      <span className="absolute z-40 bottom-0 right-0 size-3 lg:size-3.5 rounded-full bg-success border-2 border-surface" />
+                    )}
                   </div>
 
-                  <div className="flex justify-between items-center mt-1">
-                    <p className="truncate text-sm text-textMuted">
-                      {item.isTyping ? (
-                        <span className="text-accent font-medium">
-                          typing...
-                        </span>
-                      ) : (
-                        item.lastMessage || " "
-                      )}
-                    </p>
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-medium text-[14px] lg:text-[15px] truncate text-textPrimary/90">
+                        {item.name}
+                      </h3>
 
-                    <div
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsMenuOpen(true);
-                        setIsMenuOpenNumber(item.id);
-                      }}
-                      className="flex justify-center items-center gap-2"
-                    >
-                      {item.isPinned && (
-                        <span className="text-textMuted size-4 lg:size-5 flex justify-center items-center">
-                          <Pin size={18} />
-                        </span>
-                      )}
-                      {item.unreadCount > 0 && (
-                        <span className="min-w-5 h-5 rounded-full bg-accent text-white text-[11px] font-semibold flex items-center justify-center px-1.5">
-                          {item.unreadCount}
-                        </span>
-                      )}
-                      <span
-                        className={clsx(
-                          isMenuOpen && isMenuOpenNumber === item.id
-                            ? "flex"
-                            : "lg:hidden lg:group-hover:flex",
-                          "text-textMuted size-4 lg:size-5 flex justify-center items-center transition-all duration-200",
-                        )}
-                      >
-                        <ChevronDown size={18} />
+                      <span className="text-[10px] lg:text-[11px] font-normal text-textMuted whitespace-nowrap">
+                        {formatDateTime(item.time)}
                       </span>
                     </div>
+
+                    <div className="flex justify-between items-center mt-1">
+                      <p className="truncate text-sm text-textMuted">
+                        {item.isTyping ? (
+                          <span className="text-accent font-medium">
+                            typing...
+                          </span>
+                        ) : (
+                          item.lastMessage || " "
+                        )}
+                      </p>
+
+                      <div
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
+                        className="flex justify-center items-center gap-2"
+                      >
+                        {item.isPinned && (
+                          <span className="text-textMuted size-4 lg:size-5 flex justify-center items-center">
+                            <Pin size={18} />
+                          </span>
+                        )}
+                        {item.unreadCount > 0 && (
+                          <span className="min-w-5 h-5 rounded-full bg-accent text-white text-[11px] font-semibold flex items-center justify-center px-1.5">
+                            {item.unreadCount}
+                          </span>
+                        )}
+                        <span
+                          onClick={(e) => {
+                            openChatContextMenu(e, item.id);
+                          }}
+                          className={clsx(
+                            "text-textMuted size-4 lg:size-5 justify-center items-center transition-all duration-200",
+                            activeMenuId === item.id
+                              ? "flex"
+                              : "flex lg:hidden lg:group-hover:flex",
+                          )}
+                        >
+                          <ChevronDown size={18} />
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </NavLink>
-            </li>
+                </NavLink>
+              </li>
+              {activeMenuId === item.id && (
+                <ChatContextMenu
+                  menuPositionData={menuPositionData}
+                  setIsMenuClose={() => setActiveMenuId("")}
+                />
+              )}
+            </React.Fragment>
           ))}
           {filterChatList.length === 0 && (
             <li className="w-full h-full flex justify-center items-center">
@@ -384,12 +389,6 @@ export default function ChatList() {
           )}
         </ul>
       </nav>
-      {isMenuOpen && (
-        <ChatContextMenu
-          menuPositionData={menuPositionData}
-          setIsMenuOpen={setIsMenuOpen}
-        />
-      )}
     </article>
   );
 }
