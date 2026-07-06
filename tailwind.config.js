@@ -7,7 +7,7 @@ module.exports = {
       colors: {
         // ===== Base Backgrounds =====
         bgPrimary: "#09090B",
-        bgSecondary: "#111827",
+        bgSecondary: "#0F1117",
         bgSoft: "#18181B",
 
         // ===== Surfaces =====
@@ -39,7 +39,7 @@ module.exports = {
         warningSoft: "#78350F",
 
         error: "#EF4444",
-        errorSoft: "#7F1D1D",
+        errorSoft: "#881337",
 
         info: "#38BDF8",
         infoSoft: "#0C4A6E",

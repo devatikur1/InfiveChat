@@ -200,8 +200,9 @@ export default function ChatList() {
   //🔹 Open chat context menu & calculate its position
   function openChatContextMenu(e, id) {
     e.preventDefault();
+    console.log(e);
     setMenuPositionData({
-      isMobile: window.innerWidth < 1024,
+      isMobile: window.innerWidth < 768,
       x: e.clientY,
       y: e.clientX,
     });
@@ -228,16 +229,19 @@ export default function ChatList() {
   }
 
   return (
-    <article className="flex flex-col flex-1 lg:h-full w-full lg:w-[400px] 2xl:w-[500px] bg-surface pt-5 border-r border-border px-0.5 overflow-auto">
-      <header className="relative z-40 flex flex-col gap-4 px-5">
-        <section className="flex justify-between items-center select-none">
+    <article className="flex flex-col flex-1 md:h-full w-full md:min-w-[350px] lg:min-w-[400px] 2xl:min-w-[500px] bg-bgSecondary pt-5 border-r border-border px-0.5 overflow-auto">
+      <header className="relative z-40 flex flex-col gap-4 px-4">
+        <section className="flex justify-between items-center select-none px-1">
           <div>
-            <h2 className="font-bold text-2xl text-accent">Infive Chat</h2>
+            <h2 className="font-bold text-[22px] text-accent">Infive Chat</h2>
           </div>
           <span>
-            <div>
+            <div className="group relative">
               <span className="size-10 hover:bg-hover flex justify-center items-center p-2.5 rounded-full text-textPrimary">
                 <MessageSquarePlus />
+              </span>
+              <span className="w-20 absolute z-50 -right-5 top-9 translate-y-1/2 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                New Chat
               </span>
             </div>
           </span>
@@ -257,7 +261,7 @@ export default function ChatList() {
               value={searchQuery}
               placeholder="Search..."
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-full pl-9 pr-4 py-2 bg-surfaceSoft rounded-full outline-none text-sm text-textPrimary placeholder:text-textMuted transition-all duration-200 hover:ring-2 hover:ring-surfaceSoft focus:ring-2 focus:ring-accent"
+              className="w-full h-full pl-9 pr-4 py-2.5 bg-surfaceSoft rounded-full outline-none text-sm text-textPrimary placeholder:text-textMuted transition-all duration-200 hover:ring-2 hover:ring-surfaceSoft focus:ring-2 focus:ring-accent"
             />
 
             <footer className="absolute z-40 right-2.5 top-1/2 -translate-y-1/2">
@@ -271,19 +275,19 @@ export default function ChatList() {
               </div>
             </footer>
           </div>
-          <ul className="flex items-center gap-3 py-3 lg:py-2.5">
-            {FILTER_METH_ARR.map((item) => (
+          <ul className="flex items-center gap-3 py-3 md:py-3">
+            {FILTER_METH_ARR.map(({ id, name }) => (
               <li
-                key={item.id}
-                onClick={() => setActiveFilter(item.id)}
+                key={id}
+                onClick={() => setActiveFilter(id)}
                 className={clsx(
-                  "flex items-center cursor-pointer rounded-full border px-3 py-1 text-[12px] lg:text-[13px] font-semibold transition-all duration-200 select-none",
-                  activeFilter === item.id
+                  "flex items-center cursor-pointer rounded-full border px-3 py-1 text-[12px] md:text-[13px] font-semibold transition-all duration-200 select-none",
+                  activeFilter === id
                     ? "border-accent bg-accent/15 text-accent"
                     : "border-border bg-surfaceSoft text-textMuted hover:bg-boxHover",
                 )}
               >
-                <span>{item.name}</span>
+                <span>{name}</span>
               </li>
             ))}
           </ul>
@@ -299,29 +303,29 @@ export default function ChatList() {
               >
                 <NavLink
                   to={`@${item.username}`}
-                  className="w-full flex items-center gap-3 px-2 lg:px-4 py-3 rounded-lg transition-all duration-200 lg:hover:bg-boxHover"
+                  className="w-full flex items-center gap-3 px-2 md:px-4 py-3 rounded-lg transition-all duration-200 md:hover:bg-boxHover"
                 >
                   {/* Avatar */}
                   <div className="relative z-40 shrink-0">
                     <img
                       src={item.avatar}
                       alt={item.name}
-                      className="size-12 lg:size-14 rounded-full object-cover"
+                      className="size-12 md:size-14 rounded-full object-cover"
                     />
 
                     {item.isOnline && (
-                      <span className="absolute z-40 bottom-0 right-0 size-3 lg:size-3.5 rounded-full bg-success border-2 border-surface" />
+                      <span className="absolute z-40 bottom-0 right-0 size-3 md:size-3.5 rounded-full bg-success border-2 border-surface" />
                     )}
                   </div>
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-center">
-                      <h3 className="font-medium text-[14px] lg:text-[15px] truncate text-textPrimary/90">
+                      <h3 className="font-medium text-[14px] md:text-[15px] truncate text-textPrimary/90">
                         {item.name}
                       </h3>
 
-                      <span className="text-[10px] lg:text-[11px] font-normal text-textMuted whitespace-nowrap">
+                      <span className="text-[10px] md:text-[11px] font-normal text-textMuted whitespace-nowrap">
                         {formatDateTime(item.time)}
                       </span>
                     </div>
@@ -345,7 +349,7 @@ export default function ChatList() {
                         className="flex justify-center items-center gap-2"
                       >
                         {item.isPinned && (
-                          <span className="text-textMuted size-4 lg:size-5 flex justify-center items-center">
+                          <span className="text-textMuted size-4 md:size-5 flex justify-center items-center">
                             <Pin size={18} />
                           </span>
                         )}
@@ -359,10 +363,10 @@ export default function ChatList() {
                             openChatContextMenu(e, item.id);
                           }}
                           className={clsx(
-                            "text-textMuted size-4 lg:size-5 justify-center items-center transition-all duration-200",
+                            "text-textMuted size-4 md:size-5 justify-center items-center transition-all duration-200",
                             activeMenuId === item.id
                               ? "flex"
-                              : "flex lg:hidden lg:group-hover:flex",
+                              : "flex md:hidden md:group-hover:flex",
                           )}
                         >
                           <ChevronDown size={18} />

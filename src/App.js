@@ -6,15 +6,18 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import AppLayout from "./layouts/AppLayout";
-import ChatBoxPage from "./pages/ChatBoxPage";
-import ChatsPage from "./pages/ChatsPage";
+import ChatLayout from "./layouts/ChatLayout";
+import EmptyChatBoxPage from "./pages/EmptyChatBoxPage";
+import ChatInboxPage from "./pages/ChatInboxPage";
 
 export default function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<AppLayout />}>
-        <Route index element={<ChatsPage />} />
-        <Route path=":id" element={<ChatBoxPage />} />
+        <Route element={<ChatLayout />}>
+          <Route index element={<EmptyChatBoxPage />} />
+          <Route path=":id" element={<ChatInboxPage />} />
+        </Route>
       </Route>,
     ),
   );
