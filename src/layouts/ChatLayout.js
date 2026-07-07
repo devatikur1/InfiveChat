@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 export default function ChatLayout() {
   return (
-    <section className="flex h-full flex-1 overflow-auto">
+    <section className="flex h-full flex-1 overflow-auto md:overflow-hidden">
       <ChatList />
       <Outlet />
     </section>
