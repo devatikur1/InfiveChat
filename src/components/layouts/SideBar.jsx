@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { CircleDashed, Images, MessageSquareText } from "lucide-react";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Tooltip from "../custom/Tooltip";
 
 const SIDEBAR_ITEM_LIST = [
   [
@@ -62,9 +63,7 @@ export default function SideBar() {
               >
                 <Icon />
               </div>
-              <span className="absolute z-50 left-14 top-1/2 -translate-y-1/2 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                {title}
-              </span>
+              <Tooltip position={"right"}>{title}</Tooltip>
             </li>
           ))}
         </ul>
@@ -90,9 +89,7 @@ export default function SideBar() {
                     />
                   )}
                 </div>
-                <span className="absolute z-50 left-14 top-1/2 -translate-y-1/2 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                  {title}
-                </span>
+                <Tooltip position={"right"}>{title}</Tooltip>
               </li>
             ),
           )}

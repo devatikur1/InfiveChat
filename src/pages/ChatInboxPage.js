@@ -1,5 +1,7 @@
-import { Info, Phone, Video } from "lucide-react";
+import { Info, Mic, Phone, Plus, SendHorizontal, Sticker, Video } from "lucide-react";
 import React from "react";
+import Tooltip from "../components/custom/Tooltip";
+import { motion } from "framer-motion";
 
 export default function ChatInboxPage() {
   const CHAT_HEADER_ACTIONS = [
@@ -7,47 +9,107 @@ export default function ChatInboxPage() {
       id: 1,
       title: "Audio Call",
       icon: Phone,
+      className: "",
     },
     {
       id: 2,
       title: "Video Call",
       icon: Video,
+      className: "",
     },
     {
       id: 3,
-      title: "Chat Info",
+      title: "Contact Info",
       icon: Info,
+      className: "left-2",
     },
   ];
   return (
     <article className="w-full h-full flex justify-start items-center">
       <figure className="w-full h-full flex flex-col">
-        <header className="w-full min-h-[60px] bg-bgSecondary flex justify-between items-center px-4">
+        <header className="w-full min-h-[60px] bg-bgSecondary flex items-center justify-between px-4 border-b border-border">
           <div className="flex items-center gap-3">
             <img
+              src="https://i.pravatar.cc/150?img=51"
               alt="Design Team"
-              src={"https://i.pravatar.cc/150?img=51"}
-              className="w-[35px] rounded-full"
+              className="size-9 rounded-full object-cover"
             />
-            <h2 className="text-base text-textPrimary font-bold">
-              Design Team
-            </h2>
+
+            <div className="flex flex-col overflow-hidden">
+              <h2 className="truncate text-base font-semibold text-textPrimary">
+                Mymuna
+              </h2>
+
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="truncate text-xs text-textMuted"
+              >
+                Click here for contact info
+              </motion.p>
+            </div>
           </div>
-          <ul className="flex gap-8 items-center">
-            {CHAT_HEADER_ACTIONS.map(({ id, title, icon: Icon }) => (
-              <li key={id} className="group relative">
-                <span className="size-10 hover:bg-hover flex justify-center items-center p-2.5 rounded-full text-textPrimary">
-                  <Icon size={22} />
-                </span>
-                <span className="w-20 absolute z-50 -right-5 top-9 translate-y-1/2 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+
+          <ul className="flex items-center gap-2">
+            {CHAT_HEADER_ACTIONS.map(({ id, title, className, icon: Icon }) => (
+              <li key={id} className="relative group">
+                <button
+                  type="button"
+                  className="flex size-10 cursor-pointer items-center justify-center rounded-full text-textPrimary transition-colors hover:bg-hover"
+                  aria-label={title}
+                >
+                  <Icon size={21} strokeWidth={2} />
+                </button>
+
+                <Tooltip position={"bottom"} className={className}>
                   {title}
-                </span>
+                </Tooltip>
               </li>
             ))}
           </ul>
         </header>
-        <main></main>
-        <footer></footer>
+        <main className="flex-1"></main>
+        <footer className="w-full min-h-[80px] flex justify-center items-center">
+          <article className="w-full flex items-center bg-surface">
+            <div className="flex items-center">
+              <button
+                type="button"
+                className="flex size-10 cursor-pointer items-center justify-center rounded-full text-textPrimary transition-colors hover:bg-hover"
+                aria-label={"uplod File"}
+              >
+                <Plus size={21} strokeWidth={2} />
+              </button>
+              <button
+                type="button"
+                className="flex size-10 cursor-pointer items-center justify-center rounded-full text-textPrimary transition-colors hover:bg-hover"
+                aria-label={"Add Emoji, Stiker, jif"}
+              >
+                <Sticker size={21} strokeWidth={2} />
+              </button>
+            </div>
+            <div>
+              <input type="text" placeholder="Type Messege" />
+            </div>
+            <div>
+              <button
+                type="button"
+                className="flex size-10 cursor-pointer items-center justify-center rounded-full text-textPrimary transition-colors hover:bg-hover"
+                aria-label={"Add Emoji, Stiker, jif"}
+              >
+                <Mic size={21} strokeWidth={2} />
+              </button>
+              <button
+                type="button"
+                className="flex size-10 cursor-pointer items-center justify-center rounded-full text-textPrimary transition-colors hover:bg-hover"
+                aria-label={"Add Emoji, Stiker, jif"}
+              >
+                <SendHorizontal size={21} strokeWidth={2} />
+              </button>
+            </div>
+          </article>
+        </footer>
       </figure>
     </article>
   );

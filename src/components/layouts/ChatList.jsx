@@ -11,6 +11,7 @@ import moment from "moment";
 import React, { useMemo, useState } from "react";
 import ChatContextMenu from "./ChatContextMenu";
 import { NavLink } from "react-router-dom";
+import Tooltip from "../custom/Tooltip";
 
 //🔹 Chat Listt
 const CHAT_LIST = [
@@ -240,9 +241,7 @@ export default function ChatList() {
               <span className="size-10 hover:bg-hover flex justify-center items-center p-2.5 rounded-full text-textPrimary">
                 <MessageSquarePlus />
               </span>
-              <span className="w-20 absolute z-50 -right-5 top-9 translate-y-1/2 rounded-lg bg-surfaceSoft px-2.5 py-0.5 text-[12px] font-bold border border-boxHover text-textPrimary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                New Chat
-              </span>
+              <Tooltip position={"bottom"}>New Chat</Tooltip>
             </div>
           </span>
         </section>
