@@ -9,7 +9,7 @@ const SIDEBAR_ITEM_LIST = [
     {
       id: 1,
       title: "Chats",
-      path: /^\/(status|media|you)$/,
+      path: "",
       isIcon: true,
       icon: MessageSquareText,
     },
@@ -44,6 +44,22 @@ export default function SideBar() {
   const navigate = useNavigate();
   const locarion = useLocation();
 
+  function detectPath(itemPath, currentPath) {
+    // Special routes
+    const specialPaths = ["/status", "/media", "/you"];
+
+    // Chats
+    if (itemPath === "") {
+      return (
+        currentPath === "/" ||
+        (!specialPaths.includes(currentPath) && currentPath.startsWith("/"))
+      );
+    }
+
+    // Other routes
+    return currentPath === itemPath;
+  }
+
   return (
     <aside className="h-[56px] md:h-full w-full md:w-[55px] bg-transparent py-5 border-t md:border-r border-border">
       <nav className="w-full h-full flex flex-row md:flex-col md:justify-between">
@@ -58,7 +74,7 @@ export default function SideBar() {
                 onClick={() => navigate(path)}
                 className={clsx(
                   "size-10 hover:bg-hover flex justify-center items-center p-2.5 rounded-full text-textPrimary",
-                  path === locarion.pathname && "bg-active",
+                  detectPath(path, locarion.pathname) && "bg-active",
                 )}
               >
                 <Icon />
@@ -75,7 +91,7 @@ export default function SideBar() {
                   onClick={() => navigate(path)}
                   className={clsx(
                     "size-10 hover:bg-hover flex justify-center items-center rounded-full text-textPrimary",
-                    path === locarion.pathname && "bg-active",
+                    detectPath(path, locarion.pathname) && "bg-active",
                     isIcon ? "p-2.5" : "p-1",
                   )}
                 >
@@ -103,7 +119,7 @@ export default function SideBar() {
                   onClick={() => navigate(path)}
                   className={clsx(
                     "size-10 hover:bg-hover flex flex-col justify-center items-center p-2.5 rounded-full text-textPrimary",
-                    path === locarion.pathname && "bg-active",
+                    detectPath(path, locarion.pathname) && "bg-active",
                   )}
                 >
                   {isIcon ? (
