@@ -42,7 +42,7 @@ const SIDEBAR_ITEM_LIST = [
 export default function SideBar() {
   // 🔹 Navigate
   const navigate = useNavigate();
-  const locarion = useLocation();
+  const { pathname } = useLocation();
 
   function detectPath(itemPath, currentPath) {
     // Special routes
@@ -60,8 +60,15 @@ export default function SideBar() {
     return currentPath === itemPath;
   }
 
+  // check chat open
+  const isChatOpen = pathname !== "/" && !["/status", "/media", "/you"].includes(pathname);
   return (
-    <aside className="h-[56px] md:h-full w-full md:w-[55px] bg-transparent py-5 border-t md:border-r border-border">
+    <aside
+      className={clsx(
+        "h-[56px] md:h-full w-full md:w-[55px] bg-transparent py-5 border-t md:border-r border-border",
+        isChatOpen ? "hidden md:flex" : "flex",
+      )}
+    >
       <nav className="w-full h-full flex flex-row md:flex-col md:justify-between">
         {/* Pc Version */}
         <ul
@@ -74,7 +81,7 @@ export default function SideBar() {
                 onClick={() => navigate(path)}
                 className={clsx(
                   "size-10 hover:bg-hover flex justify-center items-center p-2.5 rounded-full text-textPrimary",
-                  detectPath(path, locarion.pathname) && "bg-active",
+                  detectPath(path, pathname) && "bg-active",
                 )}
               >
                 <Icon />
@@ -91,7 +98,7 @@ export default function SideBar() {
                   onClick={() => navigate(path)}
                   className={clsx(
                     "size-10 hover:bg-hover flex justify-center items-center rounded-full text-textPrimary",
-                    detectPath(path, locarion.pathname) && "bg-active",
+                    detectPath(path, pathname) && "bg-active",
                     isIcon ? "p-2.5" : "p-1",
                   )}
                 >
@@ -119,7 +126,7 @@ export default function SideBar() {
                   onClick={() => navigate(path)}
                   className={clsx(
                     "size-10 hover:bg-hover flex flex-col justify-center items-center p-2.5 rounded-full text-textPrimary",
-                    detectPath(path, locarion.pathname) && "bg-active",
+                    detectPath(path, pathname) && "bg-active",
                   )}
                 >
                   {isIcon ? (

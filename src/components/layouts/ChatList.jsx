@@ -7,11 +7,11 @@ import {
   Search,
   X,
 } from "lucide-react";
-import moment from "moment";
 import React, { useMemo, useState } from "react";
 import ChatContextMenu from "./ChatContextMenu";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import Tooltip from "../custom/Tooltip";
+import useFunction from "../../hooks/useFunction";
 
 //🔹 Chat Listt
 const CHAT_LIST = [
@@ -176,6 +176,12 @@ export default function ChatList() {
   const [activeMenuId, setActiveMenuId] = useState(null);
   const [menuPositionData, setMenuPositionData] = useState({});
 
+  // 🔹 Router
+  const { pathname } = useLocation();
+
+  // 🔹 custom hook
+  const [formatDateTime] = useFunction();
+
   // 🔹 Filter Chat List
   const filterChatList = useMemo(() => {
     let chats = chatListData.filter((chat) =>
@@ -210,27 +216,17 @@ export default function ChatList() {
     setActiveMenuId(id);
   }
 
-  //🔹 Format chat timestamp for chat list display
-  // Today      -> 10:30 AM
-  // Yesterday  -> Yesterday
-  // Within 7 days -> Monday
-  // Older      -> MM/DD/YYYY
-  function formatDateTime(time) {
-    let days = moment().diff(moment(time), "days");
-
-    if (days === 0) {
-      return moment(time).format("LT");
-    } else if (days === 1) {
-      return "Yesterday";
-    } else if (days < 8) {
-      return moment(time).format("dddd");
-    } else {
-      return moment(time).format("L");
-    }
-  }
+  // check chat open
+  const isChatOpen =
+    pathname !== "/" && !["/status", "/media", "/you"].includes(pathname);
 
   return (
-    <article className="flex flex-col flex-1 md:h-full w-full md:min-w-[350px] lg:min-w-[400px] 2xl:min-w-[500px] bg-bgSecondary pt-5 border-r border-border px-0.5 overflow-auto">
+    <article
+      className={clsx(
+        isChatOpen ? "hidden md:flex" : "flex",
+        "flex flex-col flex-1 md:h-full w-full md:min-w-[350px] lg:min-w-[400px] 2xl:min-w-[500px] bg-bgSecondary pt-5 border-r border-border px-0.5 overflow-auto",
+      )}
+    >
       <header className="relative z-40 flex flex-col gap-4 px-4">
         <section className="flex justify-between items-center select-none px-1">
           <div>
@@ -293,7 +289,7 @@ export default function ChatList() {
         </section>
       </header>
       <nav className="w-full h-full flex flex-col overflow-auto custom-scroll">
-        <ul className="w-full h-full flex flex-col gap-3 py-1.5 px-2">
+        <ul className="w-full h-full flex flex-col gap-3 py-5 px-2">
           {filterChatList.map((item) => (
             <React.Fragment key={item.id}>
               <li
@@ -325,7 +321,7 @@ export default function ChatList() {
                       </h3>
 
                       <span className="text-[10px] md:text-[11px] font-normal text-textMuted whitespace-nowrap">
-                        {formatDateTime(item.time)}
+                        {formatDateTime(item.time, false)}
                       </span>
                     </div>
 

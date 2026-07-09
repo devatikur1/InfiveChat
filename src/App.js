@@ -9,6 +9,7 @@ import AppLayout from "./layouts/AppLayout";
 import ChatLayout from "./layouts/ChatLayout";
 import EmptyChatBoxPage from "./pages/EmptyChatBoxPage";
 import ChatInboxPage from "./pages/ChatInboxPage";
+import MediaPage from "./pages/MediaPage";
 
 export default function App() {
   const router = createBrowserRouter(
@@ -18,6 +19,7 @@ export default function App() {
           <Route index element={<EmptyChatBoxPage />} />
           <Route path=":id" element={<ChatInboxPage />} />
         </Route>
+        <Route path="media" element={<MediaPage />} />
       </Route>,
     ),
   );

@@ -46,3 +46,9 @@
     }
   }
 }
+
+.chat-background {
+  background: #0b141a;
+  background-image: url("https://i.redd.it/3jfjc53fsyb61.jpg");
+  background-repeat: repeat;
+}
