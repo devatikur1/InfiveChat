@@ -65,7 +65,7 @@ export default function SideBar() {
   return (
     <aside
       className={clsx(
-        "h-[56px] md:h-full w-full md:w-[55px] bg-transparent py-5 border-t md:border-r border-border",
+        "h-[56px] md:h-full w-full md:w-[55px] bg-transparent py-5 border-t md:border-r border-border select-none *:select-none",
         isChatOpen ? "hidden md:flex" : "flex",
       )}
     >
