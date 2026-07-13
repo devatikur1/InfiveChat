@@ -224,7 +224,7 @@ export default function ChatList() {
     <article
       className={clsx(
         isChatOpen ? "hidden md:flex" : "flex",
-        "flex flex-col flex-1 md:h-full w-full md:min-w-[350px] lg:min-w-[400px] 2xl:min-w-[500px] bg-bgSecondary pt-5 border-r border-border px-0.5 overflow-auto",
+        "flex flex-col flex-1 md:h-full w-full md:min-w-[350px] lg:min-w-[400px] 2xl:min-w-[500px] bg-bgSecondary pt-5 border-r border-border px-0.5 overflow-y-auto overflow-x-hidden",
       )}
     >
       <header className="relative z-40 flex flex-col gap-4 px-4">
@@ -234,10 +234,10 @@ export default function ChatList() {
           </div>
           <span>
             <div className="group relative">
-              <span className="size-10 hover:bg-hover flex justify-center items-center p-2.5 rounded-full text-textPrimary">
+              <span disabled className="size-10 hover:bg-hover flex justify-center items-center p-2.5 rounded-full text-textPrimary disabled:opacity-70">
                 <MessageSquarePlus />
               </span>
-              <Tooltip position={"bottom"}>New Chat</Tooltip>
+              <Tooltip position={"bottom"} className="-left-3.5">Coming Soon New Chat</Tooltip>
             </div>
           </span>
         </section>

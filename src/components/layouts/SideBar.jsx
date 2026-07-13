@@ -12,6 +12,7 @@ const SIDEBAR_ITEM_LIST = [
       path: "",
       isIcon: true,
       icon: MessageSquareText,
+      isDisabled: false,
     },
     {
       id: 2,
@@ -19,6 +20,7 @@ const SIDEBAR_ITEM_LIST = [
       path: "/status",
       isIcon: true,
       icon: CircleDashed,
+      isDisabled: true,
     },
   ],
   [
@@ -28,6 +30,7 @@ const SIDEBAR_ITEM_LIST = [
       path: "/media",
       isIcon: true,
       icon: Images,
+      isDisabled: false,
     },
     {
       id: 4,
@@ -35,6 +38,7 @@ const SIDEBAR_ITEM_LIST = [
       path: "/you",
       isIcon: false,
       link: "https://i.pinimg.com/564x/bd/cc/de/bdccde33dea7c9e549b325635d2c432e.jpg",
+      isDisabled: true,
     },
   ],
 ];
@@ -61,7 +65,8 @@ export default function SideBar() {
   }
 
   // check chat open
-  const isChatOpen = pathname !== "/" && !["/status", "/media", "/you"].includes(pathname);
+  const isChatOpen =
+    pathname !== "/" && !["/status", "/media", "/you"].includes(pathname);
   return (
     <aside
       className={clsx(
@@ -75,29 +80,44 @@ export default function SideBar() {
           key={1}
           className="hidden md:flex flex-row md:flex-col md:justify-center items-center gap-3"
         >
-          {SIDEBAR_ITEM_LIST[0].map(({ id, path, title, icon: Icon }) => (
-            <li key={id} className="relative z-50 group">
-              <div
-                onClick={() => navigate(path)}
-                className={clsx(
-                  "size-10 hover:bg-hover flex justify-center items-center p-2.5 rounded-full text-textPrimary",
-                  detectPath(path, pathname) && "bg-active",
-                )}
+          {SIDEBAR_ITEM_LIST[0].map(
+            ({ id, path, title, icon: Icon, isDisabled }) => (
+              <li
+                key={id}
+                disabled={isDisabled}
+                className="relative z-50 group"
               >
-                <Icon />
-              </div>
-              <Tooltip position={"right"}>{title}</Tooltip>
-            </li>
-          ))}
+                <div
+                  onClick={() => !isDisabled && navigate(path)}
+                  className={clsx(
+                    "size-10 hover:bg-hover flex justify-center items-center p-2.5 rounded-full",
+                    isDisabled ? "text-textDark" : "text-textPrimary",
+                    detectPath(path, pathname) && "bg-active",
+                  )}
+                >
+                  <Icon />
+                </div>
+                <Tooltip position={"right"}>
+                  {isDisabled && "Coming Soon "}
+                  {title}
+                </Tooltip>
+              </li>
+            ),
+          )}
         </ul>
         <ul className="hidden md:flex flex-row md:flex-col justify-center items-center gap-2">
           {SIDEBAR_ITEM_LIST[1].map(
-            ({ id, path, title, link, isIcon, icon: Icon }) => (
-              <li key={id} className="relative z-50 group">
+            ({ id, path, title, link, isIcon, icon: Icon, isDisabled }) => (
+              <li
+                key={id}
+                disabled={isDisabled}
+                className="relative z-50 group"
+              >
                 <div
-                  onClick={() => navigate(path)}
+                  onClick={() => !isDisabled && navigate(path)}
                   className={clsx(
                     "size-10 hover:bg-hover flex justify-center items-center rounded-full text-textPrimary",
+                    isDisabled ? "text-textDark" : "text-textPrimary",
                     detectPath(path, pathname) && "bg-active",
                     isIcon ? "p-2.5" : "p-1",
                   )}
@@ -112,7 +132,10 @@ export default function SideBar() {
                     />
                   )}
                 </div>
-                <Tooltip position={"right"}>{title}</Tooltip>
+                <Tooltip position={"right"}>
+                  {isDisabled && "Coming Soon "}
+                  {title}
+                </Tooltip>
               </li>
             ),
           )}
@@ -120,12 +143,17 @@ export default function SideBar() {
         {/* Mobile Version */}
         <ul className="w-full flex md:hidden flex-row justify-between items-center gap-2  px-5">
           {SIDEBAR_ITEM_LIST.flat().map(
-            ({ id, path, title, link, isIcon, icon: Icon }) => (
-              <li key={id} className="relative z-50 group">
+            ({ id, path, title, link, isIcon, icon: Icon, isDisabled }) => (
+              <li
+                key={id}
+                disabled={isDisabled}
+                className="relative z-50 group"
+              >
                 <div
-                  onClick={() => navigate(path)}
+                  onClick={() => !isDisabled && navigate(path)}
                   className={clsx(
                     "size-10 hover:bg-hover flex flex-col justify-center items-center p-2.5 rounded-full text-textPrimary",
+                    isDisabled ? "text-textDark" : "text-textPrimary",
                     detectPath(path, pathname) && "bg-active",
                   )}
                 >

@@ -8,7 +8,7 @@ module.exports = {
         // ===== Base Backgrounds =====
         bgPrimary: "#09090B",
         bgSecondary: "#0F1117",
-        bgSoft: "#18181B",
+        bgSoft: "#e3e3e3",
 
         // ===== Surfaces =====
         surface: "#0F1117",
@@ -18,7 +18,7 @@ module.exports = {
         // ===== Text =====
         textPrimary: "#F8FAFC",
         textMuted: "#94A3B8",
-        textDark: "#020617",
+        textDark: "#525354",
 
         // ===== Accent =====
         accent: "#3B82F6",

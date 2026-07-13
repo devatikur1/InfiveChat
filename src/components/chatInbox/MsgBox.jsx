@@ -1,21 +1,22 @@
+import clsx from "clsx";
 import { Mic, Plus, SendHorizontal, Sticker } from "lucide-react";
 import React, { useState } from "react";
+import MediaOptions from "./msgBox/MediaOptions";
 
 export default function MsgBox({ msgs, setMsgs }) {
   //🔹 All state
   const [msg, setMsg] = useState("");
+  const [showMediaOptions, setShowMediaOptions] = useState(false);
 
   // 🔹 Send message handler
-  function setMessages() {
-    const now = new Date();
-    const dateTime = now.toISOString().slice(0, 19);
+  function createMessage(text, senderId) {
     setMsgs((p) => [
       ...p,
       {
-        id: msgs.length + 1,
-        text: msg,
-        senderId: "user_1",
-        createdAt: dateTime,
+        id: crypto.randomUUID(),
+        text,
+        senderId,
+        createdAt: new Date().toISOString(),
       },
     ]);
     setMsg("");
@@ -29,12 +30,21 @@ export default function MsgBox({ msgs, setMsgs }) {
         >
           {/* Left Actions */}
           <div className="h-full flex items-center gap-1">
-            <button
-              type="button"
-              className="flex size-9 md:size-10 items-center justify-center rounded-full text-textMuted transition-colors hover:bg-hover hover:text-textPrimary"
-            >
-              <Plus size={19} />
-            </button>
+            <article className="relative">
+              <button
+                type="button"
+                onClick={() => setShowMediaOptions(true)}
+                className={clsx(
+                  "flex size-9 md:size-10 items-center justify-center rounded-full text-textMuted transition-colors hover:bg-hover hover:text-textPrimary",
+                  showMediaOptions && "bg-hover text-textPrimary",
+                )}
+              >
+                <Plus size={19} />
+              </button>
+              {showMediaOptions && (
+                <MediaOptions setShowMediaOptions={setShowMediaOptions} />
+              )}
+            </article>
 
             <button
               type="button"
@@ -74,7 +84,7 @@ export default function MsgBox({ msgs, setMsgs }) {
           <div className="h-full flex items-center gap-1">
             {msg.trim() ? (
               <button
-                onClick={() => setMessages()}
+                onClick={() => createMessage(msg, "user_1")}
                 type="button"
                 className="flex size-9 md:size-10 items-center justify-center rounded-full bg-accent text-white transition-colors hover:opacity-90"
               >
